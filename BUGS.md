@@ -12,7 +12,7 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What is wrong:** The list is showing oldest expenses first. Newest should be at the top.
 
-**What I changed:**
+**What I changed:** Fixed the sort order in ExpenseList.jsx line 59. Changed `dateValue(a.date) - dateValue(b.date)` to `dateValue(b.date) - dateValue(a.date)` to sort in descending order (newest first).
 
 ---
 
