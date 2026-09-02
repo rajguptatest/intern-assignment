@@ -85,6 +85,7 @@ export default function App() {
             query={query}
             category={category}
             paidBy={paidBy}
+            expenses={state.expenses}
             onQuery={setQuery}
             onCategory={setCategory}
             onPaidBy={setPaidBy}

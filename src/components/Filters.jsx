@@ -1,14 +1,20 @@
-const CATEGORIES = ["All", "Food", "Travel", "Fun", "Stay"];
+const CATEGORIES = ["All", "Food", "Travel", "Fun", "Stay", "Other"];
 
 export default function Filters({
   members,
   query,
   category,
   paidBy,
+  expenses,
   onQuery,
   onCategory,
   onPaidBy,
 }) {
+  const categories = [
+    ...CATEGORIES,
+    ...new Set(expenses.map((expense) => expense.category).filter(Boolean)),
+  ];
+
   return (
     <section className="card">
       <h2>Filter</h2>
@@ -39,7 +45,7 @@ export default function Filters({
         </div>
       </div>
       <div className="chips" style={{ marginTop: 12 }}>
-        {CATEGORIES.map((c) => (
+        {categories.map((c) => (
           <button
             key={c}
             type="button"

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { percentsSumTo100 } from "../lib/money.js";
 
-const CATEGORIES = ["Food", "Travel", "Fun", "Stay"];
+const CATEGORIES = ["Food", "Travel", "Fun", "Stay", "Other"];
 
 function evenPercents(ids) {
   if (!ids.length) return {};
@@ -19,6 +19,7 @@ export default function AddExpenseForm({ members, onAdd }) {
   const [paidBy, setPaidBy] = useState(members[0]?.id ?? "");
   const [date, setDate] = useState("2026-03-16");
   const [category, setCategory] = useState("Food");
+  const [customCategory, setCustomCategory] = useState("");
   const [splitType, setSplitType] = useState("equal");
   const [splitWith, setSplitWith] = useState(members.map((m) => m.id));
   const [percents, setPercents] = useState(evenPercents(members.map((m) => m.id)));
@@ -53,6 +54,11 @@ export default function AddExpenseForm({ members, onAdd }) {
       setError("Percentages must add to 100.");
       return;
     }
+    const expenseCategory = category === "Other" ? customCategory.trim() : category;
+    if (!expenseCategory) {
+      setError("Enter a category.");
+      return;
+    }
 
     onAdd({
       description: description.trim(),
@@ -62,7 +68,7 @@ export default function AddExpenseForm({ members, onAdd }) {
       splitWith: splitWith.map(Number),
       percents: splitType === "percent" ? percents : undefined,
       date: new Date(date),
-      category,
+      category: expenseCategory,
     });
   }
 
@@ -127,6 +133,17 @@ export default function AddExpenseForm({ members, onAdd }) {
               ))}
             </select>
           </div>
+          {category === "Other" && (
+            <div className="field">
+              <label htmlFor="customCat">Category name</label>
+              <input
+                id="customCat"
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                placeholder="e.g. Health"
+              />
+            </div>
+          )}
         </div>
 
         <div style={{ marginTop: 12 }}>

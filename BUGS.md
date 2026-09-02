@@ -97,9 +97,71 @@ After reload, dates were strings instead of Date objects, breaking:
 
 ---
 
+### Bug 5: Balance status colors and labels are reversed
+
+**Status:** ✅ FIXED & BUILD VERIFIED
+
+**How to reproduce:**
+1. Open the app with expenses that leave one member in credit and another in debt
+2. Check the Balances panel
+
+**What was wrong:**
+Positive balances represent money the member should receive, while negative balances represent money the member needs to pay. The panel displayed those labels and colors in reverse.
+
+**What I changed:**
+- Corrected the balance labels in `src/components/BalancesPanel.jsx`.
+- Positive balances now show `is owed` in green.
+- Negative balances now show `owes` in red.
+
+**Commit:** Pending
+**File path:** src/components/BalancesPanel.jsx
+
+---
+
+### Bug 6: Duplicate member names cause ambiguity
+
+**Status:** ✅ FIXED & BUILD VERIFIED
+
+**How to reproduce:**
+1. Open the app and try to add a member whose name already exists
+
+**What was wrong:**
+Duplicate names were accepted, making payer and split selections ambiguous.
+
+**What I changed:**
+- Added a case-insensitive duplicate-name check in `src/components/SummaryCards.jsx`.
+- Names are trimmed before comparison, so spacing and capitalization differences do not bypass validation.
+- Added inline feedback and kept the rejected name in the form.
+
+**Commit:** Pending
+**File path:** src/components/SummaryCards.jsx
+
+---
+
+### Bug 7: Expense categories are limited to four options
+
+**Status:** ✅ FIXED & BUILD VERIFIED
+
+**How to reproduce:**
+1. Open the app and start adding an expense
+2. Select `Other` as the category
+
+**What was wrong:**
+Users could only choose Food, Travel, Fun, or Stay.
+
+**What I changed:**
+- Added an `Other` category option in `src/components/AddExpenseForm.jsx`.
+- Selecting `Other` reveals a required category-name input before saving.
+- Saved custom categories are included in `src/components/Filters.jsx` and remain filterable.
+
+**Commit:** Pending
+**File path:** src/components/AddExpenseForm.jsx, src/components/Filters.jsx
+
+---
+
 ## Verification Summary
 
-✅ **All 4 critical bugs FIXED and TESTED**
+✅ **All 7 critical bugs FIXED**
 
 | Bug | Issue | Verification |
 |-----|-------|--------------|
@@ -107,6 +169,11 @@ After reload, dates were strings instead of Date objects, breaking:
 | Balance Calc | Incorrect payer debit | Balances now sum correctly |
 | Paid By Filter | Type mismatch | Filter works for all members |
 | Date Hydration | String instead of Date | Sort order maintained after reload |
+| Balance Labels | Credit/debit labels reversed | Positive credit is green; negative debt is red |
+| Duplicate Members | Duplicate names accepted | Duplicate names rejected case-insensitively |
+| Custom Categories | Only four categories available | Other category can be named and filtered |
+
+Build verification: `npm run build` passes after the Bug 5–7 changes.
 
 
 ---
